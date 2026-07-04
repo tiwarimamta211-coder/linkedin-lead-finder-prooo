@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinkedIn Lead Finder Pro | IncomeAIHub</title>
+<meta name="description" content="Find, score, and track LinkedIn leads with AI-powered boolean search builder, lead scoring engine, CRM tracker and outreach message generator.">
+
+<!-- ================= ADSENSE (replace publisher ID before deployment) ================= -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#05060a;
+  --bg2:#0a0e17;
+  --panel:#0d1220;
+  --panel2:#101728;
+  --cyan:#00f0ff;
+  --purple:#b829ff;
+  --green:#39ff88;
+  --pink:#ff2e97;
+  --amber:#ffb020;
+  --red:#ff3860;
+  --text:#d6e4f0;
+  --muted:#7189a8;
+  --border:rgba(0,240,255,0.18);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;overflow-x:hidden;}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(184,41,255,0.08), transparent 40%),
+    radial-gradient(circle at 85% 90%, rgba(0,240,255,0.08), transparent 40%),
+    var(--bg);
+  position:relative;
+}
+body::before{
+  content:"";
+  position:fixed;inset:0;
+  pointer-events:none;
+  background:repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 3px);
+  z-index:9999;
+  mix-blend-mode:overlay;
+}
+h1,h2,h3,.brand,.logo,.section-title,.stat-num{font-family:'Orbitron',sans-serif;}
+.mono{font-family:'Share Tech Mono',monospace;}
+::selection{background:var(--cyan);color:#000;}
+::-webkit-scrollbar{width:8px;height:8px;}
+::-webkit-scrollbar-thumb{background:var(--cyan);border-radius:4px;}
+::-webkit-scrollbar-track{background:var(--panel);}
+
+/* ===== TOPBAR ===== */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 24px;border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(13,18,32,0.9), rgba(13,18,32,0.4));
+  backdrop-filter:blur(10px);position:sticky;top:0;z-index:100;
+  flex-wrap:wrap;gap:10px;
+}
+.brand{display:flex;align-items:center;gap:10px;font-size:1.1rem;font-weight:900;letter-spacing:1px;}
+.brand .dot{width:10px;height:10px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.brand span{background:linear-gradient(90deg,var(--cyan),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.tagline{font-size:0.7rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+
+/* ===== HERO ===== */
+.hero{padding:30px 24px 10px;text-align:center;}
+.hero h1{font-size:clamp(1.4rem,4vw,2.2rem);font-weight:900;letter-spacing:1px;
+  background:linear-gradient(90deg,var(--cyan),var(--purple),var(--pink));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 30px rgba(0,240,255,0.2);}
+.hero p{color:var(--muted);margin-top:8px;font-size:0.95rem;max-width:700px;margin-inline:auto;}
+
+/* ===== TABS ===== */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:20px 24px 0;}
+.tab-btn{
+  background:var(--panel);border:1px solid var(--border);color:var(--muted);
+  padding:10px 18px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-weight:600;
+  font-size:0.85rem;letter-spacing:0.5px;cursor:pointer;transition:.25s;text-transform:uppercase;
+}
+.tab-btn:hover{color:var(--cyan);border-color:var(--cyan);}
+.tab-btn.active{
+  background:linear-gradient(90deg, rgba(0,240,255,0.15), rgba(184,41,255,0.15));
+  color:var(--cyan);border-color:var(--cyan);box-shadow:0 0 15px rgba(0,240,255,0.2);
+}
+
+.wrap{max-width:1200px;margin:0 auto;padding:24px;}
+.tab-content{display:none;animation:fadeIn .3s ease;}
+.tab-content.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* ===== PANEL / CARD ===== */
+.panel{
+  background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:20px;
+  position:relative;overflow:hidden;
+}
+.panel::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--cyan),var(--purple),var(--pink),var(--cyan));
+  background-size:200% 100%;animation:scanline 4s linear infinite;
+}
+@keyframes scanline{to{background-position:200% 0;}}
+.section-title{font-size:1rem;color:var(--cyan);letter-spacing:1px;margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;text-transform:uppercase;}
+.section-title .num{background:var(--cyan);color:#000;width:26px;height:26px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;font-size:0.85rem;}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+.field{display:flex;flex-direction:column;gap:6px;}
+.field label{font-size:0.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
+input,select,textarea{
+  background:#080b13;border:1px solid var(--border);color:var(--text);
+  padding:10px 12px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:0.95rem;
+  outline:none;transition:.2s;width:100%;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,240,255,0.1);}
+textarea{resize:vertical;min-height:70px;}
+select{cursor:pointer;}
+
+.btn{
+  background:linear-gradient(90deg,var(--cyan),var(--purple));
+  color:#02040a;border:none;padding:12px 22px;border-radius:8px;font-weight:700;
+  font-family:'Rajdhani',sans-serif;font-size:0.9rem;text-transform:uppercase;letter-spacing:0.5px;
+  cursor:pointer;transition:.2s;box-shadow:0 4px 20px rgba(0,240,255,0.25);
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(0,240,255,0.4);}
+.btn.ghost{background:transparent;border:1px solid var(--border);color:var(--cyan);box-shadow:none;}
+.btn.ghost:hover{background:rgba(0,240,255,0.08);}
+.btn.danger{background:linear-gradient(90deg,var(--red),#ff6b8a);box-shadow:0 4px 20px rgba(255,56,96,0.25);}
+.btn.small{padding:7px 12px;font-size:0.75rem;}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+
+/* ===== OUTPUT BOXES ===== */
+.output-box{
+  background:#060910;border:1px solid var(--border);border-radius:10px;padding:16px;
+  font-family:'Share Tech Mono',monospace;font-size:0.85rem;color:var(--green);
+  white-space:pre-wrap;word-break:break-word;margin-top:14px;line-height:1.6;min-height:60px;
+}
+.copy-row{display:flex;justify-content:space-between;align-items:center;margin-top:6px;}
+.copy-hint{font-size:0.72rem;color:var(--muted);}
+
+/* ===== STATS DASHBOARD ===== */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:20px;}
+.stat-card{
+  background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--border);
+  border-radius:12px;padding:18px;text-align:center;position:relative;overflow:hidden;
+}
+.stat-card .stat-num{font-size:1.8rem;font-weight:900;}
+.stat-card .stat-label{font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px;}
+.stat-card.cyan .stat-num{color:var(--cyan);}
+.stat-card.green .stat-num{color:var(--green);}
+.stat-card.amber .stat-num{color:var(--amber);}
+.stat-card.pink .stat-num{color:var(--pink);}
+.stat-card.purple .stat-num{color:var(--purple);}
+
+/* ===== SCORE METER ===== */
+.score-display{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin-top:16px;}
+.score-ring{position:relative;width:140px;height:140px;flex-shrink:0;}
+.score-ring svg{transform:rotate(-90deg);}
+.score-ring circle{fill:none;stroke-width:10;}
+.score-ring .bg{stroke:#1a2233;}
+.score-ring .fg{stroke:var(--cyan);stroke-linecap:round;transition:stroke-dashoffset 1s ease, stroke .3s;}
+.score-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;font-family:'Orbitron',sans-serif;}
+.score-num .val{font-size:2rem;font-weight:900;color:var(--cyan);}
+.score-num .lbl{font-size:0.65rem;color:var(--muted);letter-spacing:1px;}
+.score-tag{
+  display:inline-block;padding:6px 16px;border-radius:20px;font-weight:700;font-size:0.85rem;
+  text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;
+}
+.tag-hot{background:rgba(255,56,96,0.15);color:var(--red);border:1px solid var(--red);}
+.tag-warm{background:rgba(255,176,32,0.15);color:var(--amber);border:1px solid var(--amber);}
+.tag-cold{background:rgba(0,240,255,0.1);color:var(--cyan);border:1px solid var(--cyan);}
+.score-breakdown{flex:1;min-width:220px;}
+.score-breakdown .row{display:flex;justify-content:space-between;font-size:0.85rem;padding:5px 0;
+  border-bottom:1px dashed rgba(255,255,255,0.06);color:var(--muted);}
+.score-breakdown .row span:last-child{color:var(--text);font-weight:600;}
+
+/* ===== TABLE ===== */
+.table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;min-width:900px;}
+thead{background:#0a0e1a;}
+th{padding:12px 10px;text-align:left;font-size:0.72rem;color:var(--cyan);text-transform:uppercase;
+  letter-spacing:0.5px;border-bottom:1px solid var(--border);white-space:nowrap;}
+td{padding:10px;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.05);vertical-align:middle;}
+tbody tr:hover{background:rgba(0,240,255,0.03);}
+.badge{padding:4px 10px;border-radius:12px;font-size:0.7rem;font-weight:700;text-transform:uppercase;white-space:nowrap;}
+.badge-new{background:rgba(0,240,255,0.12);color:var(--cyan);}
+.badge-contacted{background:rgba(255,176,32,0.12);color:var(--amber);}
+.badge-replied{background:rgba(184,41,255,0.15);color:var(--purple);}
+.badge-qualified{background:rgba(57,255,136,0.12);color:var(--green);}
+.badge-closed{background:rgba(255,56,96,0.12);color:var(--red);}
+.score-pill{font-family:'Share Tech Mono',monospace;font-weight:700;padding:3px 8px;border-radius:6px;font-size:0.78rem;}
+.icon-btn{background:none;border:1px solid var(--border);color:var(--muted);width:28px;height:28px;
+  border-radius:6px;cursor:pointer;font-size:0.8rem;margin-right:4px;transition:.2s;}
+.icon-btn:hover{color:var(--cyan);border-color:var(--cyan);}
+.icon-btn.del:hover{color:var(--red);border-color:var(--red);}
+.empty-state{text-align:center;padding:40px 20px;color:var(--muted);}
+
+/* ===== TEMPLATE CHIPS ===== */
+.chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.chip{background:var(--panel2);border:1px solid var(--border);color:var(--muted);padding:7px 14px;
+  border-radius:20px;font-size:0.78rem;cursor:pointer;transition:.2s;}
+.chip:hover,.chip.active{background:rgba(0,240,255,0.12);color:var(--cyan);border-color:var(--cyan);}
+
+/* ===== ADSENSE SLOTS ===== */
+.ad-slot{
+  background:var(--panel);border:1px dashed var(--border);border-radius:10px;
+  min-height:90px;display:flex;align-items:center;justify-content:center;
+  color:var(--muted);font-size:0.75rem;letter-spacing:1px;text-transform:uppercase;margin:20px auto;
+}
+
+/* ===== HINDI GUIDE ===== */
+.hindi-guide{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--purple);
+  border-radius:14px;padding:22px;margin-top:10px;}
+.hindi-guide h2{color:var(--purple);font-size:1.1rem;margin-bottom:14px;}
+.hindi-guide h3{color:var(--cyan);font-size:0.95rem;margin:14px 0 6px;font-family:'Rajdhani',sans-serif;font-weight:700;}
+.hindi-guide p,.hindi-guide li{font-size:0.9rem;line-height:1.7;color:var(--text);}
+.hindi-guide ul,.hindi-guide ol{padding-left:20px;margin-bottom:8px;}
+.hindi-guide summary{cursor:pointer;color:var(--cyan);font-weight:700;padding:6px 0;}
+
+.footer{text-align:center;padding:30px 20px;color:var(--muted);font-size:0.78rem;border-top:1px solid var(--border);margin-top:20px;}
+.footer .brand{justify-content:center;margin-bottom:8px;}
+
+@media(max-width:600px){
+  .hero h1{font-size:1.3rem;}
+  .tab-btn{font-size:0.75rem;padding:8px 12px;}
+  .score-display{flex-direction:column;align-items:flex-start;}
+  table{min-width:700px;}
+}
+
+.toast{
+  position:fixed;bottom:20px;right:20px;background:var(--panel);border:1px solid var(--cyan);
+  color:var(--cyan);padding:12px 20px;border-radius:8px;font-size:0.85rem;z-index:9999;
+  transform:translateY(100px);opacity:0;transition:.3s;box-shadow:0 0 20px rgba(0,240,255,0.3);
+}
+.toast.show{transform:translateY(0);opacity:1;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <div class="brand"><span class="dot"></span><span>LinkedIn Lead Finder Pro</span></div>
+    <div class="tagline">IncomeAIHub &bull; Lead Intelligence Suite</div>
+  </div>
+  <div style="font-size:0.75rem;color:var(--muted);" class="mono">100% Local &bull; No Data Leaves Your Browser</div>
+</div>
+
+<div class="hero">
+  <h1>LINKEDIN LEAD FINDER PRO</h1>
+  <p>Boolean/X-Ray search string banao, leads ko AI score do, apna pura pipeline track karo aur personalized outreach messages generate karo — sab kuch ek hi jagah, bina kisi paid tool ke.</p>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="search">🔍 Search Builder</button>
+  <button class="tab-btn" data-tab="score">⚡ Lead Scoring</button>
+  <button class="tab-btn" data-tab="tracker">📋 Lead Tracker</button>
+  <button class="tab-btn" data-tab="outreach">✉️ Outreach Generator</button>
+  <button class="tab-btn" data-tab="guide">🇮🇳 Hindi Guide</button>
+</div>
+
+<div class="wrap">
+
+<!-- ================= TAB 1: SEARCH BUILDER ================= -->
+<div class="tab-content active" id="tab-search">
+  <div class="panel">
+    <div class="section-title"><span class="num">1</span> LinkedIn Boolean Search Builder</div>
+    <div class="grid">
+      <div class="field"><label>Job Title(s) — comma separated</label>
+        <input type="text" id="s-title" placeholder="e.g. Founder, CEO, Marketing Head"></div>
+      <div class="field"><label>Industry / Niche</label>
+        <input type="text" id="s-industry" placeholder="e.g. E-commerce, SaaS, Real Estate"></div>
+      <div class="field"><label>Location</label>
+        <input type="text" id="s-location" placeholder="e.g. Mumbai, India"></div>
+      <div class="field"><label>Company Keywords</label>
+        <input type="text" id="s-company" placeholder="e.g. startup, agency"></div>
+      <div class="field"><label>Must-have Keywords</label>
+        <input type="text" id="s-keywords" placeholder="e.g. hiring, freelancer, budget"></div>
+      <div class="field"><label>Exclude Keywords</label>
+        <input type="text" id="s-exclude" placeholder="e.g. student, intern, unpaid"></div>
+      <div class="field"><label>Search Mode</label>
+        <select id="s-mode">
+          <option value="xray">Google X-Ray Search</option>
+          <option value="sn">Sales Navigator Boolean</option>
+          <option value="basic">LinkedIn Basic Search</option>
+        </select>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="buildSearch()">⚙ Generate Search String</button>
+      <button class="btn ghost" onclick="clearSearch()">Clear</button>
+    </div>
+    <div class="output-box" id="search-output">Aapki search query yahan generate hogi...</div>
+    <div class="copy-row">
+      <span class="copy-hint">Copy karke Google ya LinkedIn Sales Navigator me paste karo</span>
+      <button class="btn small ghost" onclick="copyText('search-output')">📋 Copy</button>
+    </div>
+    <div class="btn-row">
+      <a id="open-google" href="#" target="_blank" class="btn small" style="display:none;text-decoration:none;">🔗 Open in Google</a>
+      <a id="open-linkedin" href="https://www.linkedin.com/search/results/people/" target="_blank" class="btn small ghost" style="text-decoration:none;">🔗 Open LinkedIn Search</a>
+    </div>
+  </div>
+
+  <div class="ad-slot">Advertisement</div>
+
+  <div class="panel">
+    <div class="section-title"><span class="num">2</span> Saved Search Presets</div>
+    <div class="chip-row" id="preset-chips">
+      <span class="chip" onclick="applyPreset('freelance')">Freelance Clients</span>
+      <span class="chip" onclick="applyPreset('agency')">Agency Owners</span>
+      <span class="chip" onclick="applyPreset('startup')">Startup Founders</span>
+      <span class="chip" onclick="applyPreset('hr')">HR / Hiring Managers</span>
+      <span class="chip" onclick="applyPreset('ecom')">E-commerce Sellers</span>
+    </div>
+    <p style="font-size:0.8rem;color:var(--muted);">Ek click me common lead-hunting scenarios ke liye pre-filled search criteria load karo.</p>
+  </div>
+</div>
+
+<!-- ================= TAB 2: LEAD SCORING ================= -->
+<div class="tab-content" id="tab-score">
+  <div class="panel">
+    <div class="section-title"><span class="num">1</span> Lead Qualification Inputs</div>
+    <div class="grid">
+      <div class="field"><label>Job Title Match (Decision Maker?)</label>
+        <select id="sc-title">
+          <option value="10">Exact Match (CEO/Founder/Owner)</option>
+          <option value="7">Strong Match (Manager/Head)</option>
+          <option value="4">Weak Match (Executive/Associate)</option>
+          <option value="1">No Match</option>
+        </select></div>
+      <div class="field"><label>Company Size</label>
+        <select id="sc-size">
+          <option value="9">50-500 employees (Sweet Spot)</option>
+          <option value="7">10-50 employees</option>
+          <option value="5">500+ employees (Enterprise)</option>
+          <option value="3">1-10 employees (Too Small)</option>
+        </select></div>
+      <div class="field"><label>Industry Fit</label>
+        <select id="sc-industry">
+          <option value="10">Perfect Fit</option>
+          <option value="6">Related Industry</option>
+          <option value="2">Unrelated</option>
+        </select></div>
+      <div class="field"><label>LinkedIn Activity Level</label>
+        <select id="sc-activity">
+          <option value="9">Very Active (posts weekly)</option>
+          <option value="6">Somewhat Active</option>
+          <option value="3">Rarely Active</option>
+          <option value="1">Inactive/Dormant</option>
+        </select></div>
+      <div class="field"><label>Connection Degree</label>
+        <select id="sc-degree">
+          <option value="8">1st Degree</option>
+          <option value="5">2nd Degree</option>
+          <option value="2">3rd Degree / Out of Network</option>
+        </select></div>
+      <div class="field"><label>Buying Intent Signals</label>
+        <select id="sc-intent">
+          <option value="10">Actively hiring/posting need</option>
+          <option value="6">Growth signals (funding, expansion)</option>
+          <option value="3">No visible signal</option>
+        </select></div>
+      <div class="field"><label>Budget Indicator</label>
+        <select id="sc-budget">
+          <option value="9">High (funded/established biz)</option>
+          <option value="5">Medium</option>
+          <option value="2">Low/Unclear</option>
+        </select></div>
+      <div class="field"><label>Profile Completeness</label>
+        <select id="sc-profile">
+          <option value="6">Complete + Verified</option>
+          <option value="4">Partial</option>
+          <option value="1">Incomplete/Suspicious</option>
+        </select></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="calculateScore()">⚡ Calculate Lead Score</button>
+    </div>
+  </div>
+
+  <div class="panel" id="score-result-panel" style="display:none;">
+    <div class="section-title"><span class="num">2</span> Score Result</div>
+    <div id="score-tag-wrap"></div>
+    <div class="score-display">
+      <div class="score-ring">
+        <svg width="140" height="140" viewBox="0 0 140 140">
+          <circle class="bg" cx="70" cy="70" r="60"></circle>
+          <circle class="fg" id="score-circle" cx="70" cy="70" r="60" stroke-dasharray="377" stroke-dashoffset="377"></circle>
+        </svg>
+        <div class="score-num"><span class="val" id="score-val">0</span><span class="lbl">/ 100</span></div>
+      </div>
+      <div class="score-breakdown" id="score-breakdown"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn ghost" onclick="pushScoredLeadToTracker()">➕ Add This Lead to Tracker</button>
+    </div>
+  </div>
+
+  <div class="ad-slot">Advertisement</div>
+</div>
+
+<!-- ================= TAB 3: LEAD TRACKER ================= -->
+<div class="tab-content" id="tab-tracker">
+  <div class="stats-grid">
+    <div class="stat-card cyan"><div class="stat-num" id="stat-total">0</div><div class="stat-label">Total Leads</div></div>
+    <div class="stat-card pink"><div class="stat-num" id="stat-hot">0</div><div class="stat-label">Hot Leads</div></div>
+    <div class="stat-card amber"><div class="stat-num" id="stat-contacted">0</div><div class="stat-label">Contacted</div></div>
+    <div class="stat-card green"><div class="stat-num" id="stat-qualified">0</div><div class="stat-label">Qualified</div></div>
+    <div class="stat-card purple"><div class="stat-num" id="stat-pipeline">₹0</div><div class="stat-label">Pipeline Value</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="section-title"><span class="num">+</span> Add New Lead</div>
+    <div class="grid">
+      <div class="field"><label>Full Name</label><input type="text" id="l-name" placeholder="Rohan Sharma"></div>
+      <div class="field"><label>Job Title</label><input type="text" id="l-title" placeholder="Founder, ABC Pvt Ltd"></div>
+      <div class="field"><label>Company</label><input type="text" id="l-company" placeholder="ABC Pvt Ltd"></div>
+      <div class="field"><label>LinkedIn Profile URL</label><input type="text" id="l-url" placeholder="linkedin.com/in/..."></div>
+      <div class="field"><label>Manual Score (0-100)</label><input type="number" id="l-score" min="0" max="100" placeholder="75"></div>
+      <div class="field"><label>Status</label>
+        <select id="l-status"><option>New</option><option>Contacted</option><option>Replied</option><option>Qualified</option><option>Closed</option></select></div>
+      <div class="field"><label>Deal Value (₹)</label><input type="number" id="l-value" placeholder="15000"></div>
+      <div class="field"><label>Notes</label><input type="text" id="l-notes" placeholder="Follow up next week"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="addLead()">➕ Add Lead</button>
+      <button class="btn ghost" onclick="exportCSV()">⬇ Export CSV</button>
+      <button class="btn danger" onclick="clearAllLeads()">🗑 Clear All</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="section-title"><span class="num">📋</span> Your Lead Pipeline</div>
+    <div class="field" style="max-width:280px;margin-bottom:14px;">
+      <input type="text" id="search-filter" placeholder="🔍 Filter by name/company..." onkeyup="renderLeads()">
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Name</th><th>Title</th><th>Company</th><th>Score</th><th>Status</th><th>Deal ₹</th><th>Notes</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="lead-table-body"></tbody>
+      </table>
+    </div>
+    <div class="empty-state" id="empty-state" style="display:none;">Abhi tak koi lead add nahi hui. Upar form se lead add karo ya Lead Scoring tab se qualify karke bhejo.</div>
+  </div>
+
+  <div class="ad-slot">Advertisement</div>
+</div>
+
+<!-- ================= TAB 4: OUTREACH GENERATOR ================= -->
+<div class="tab-content" id="tab-outreach">
+  <div class="panel">
+    <div class="section-title"><span class="num">1</span> Outreach Message Generator</div>
+    <div class="chip-row">
+      <span class="chip active" data-tpl="connect" onclick="setTemplate('connect')">Connection Request</span>
+      <span class="chip" data-tpl="intro" onclick="setTemplate('intro')">First Message / Intro</span>
+      <span class="chip" data-tpl="followup" onclick="setTemplate('followup')">Follow-Up</span>
+      <span class="chip" data-tpl="pitch" onclick="setTemplate('pitch')">Service Pitch</span>
+      <span class="chip" data-tpl="breakup" onclick="setTemplate('breakup')">Break-up Message</span>
+    </div>
+    <div class="grid">
+      <div class="field"><label>Lead Name</label><input type="text" id="o-name" placeholder="Rohan"></div>
+      <div class="field"><label>Their Company</label><input type="text" id="o-company" placeholder="ABC Pvt Ltd"></div>
+      <div class="field"><label>Their Role</label><input type="text" id="o-title" placeholder="Founder"></div>
+      <div class="field"><label>Your Service/Offer</label><input type="text" id="o-service" placeholder="social media management"></div>
+      <div class="field"><label>Your Name</label><input type="text" id="o-myname" placeholder="Mamta"></div>
+      <div class="field"><label>Tone</label>
+        <select id="o-tone"><option value="professional">Professional</option><option value="friendly">Friendly &amp; Casual</option><option value="direct">Direct &amp; Concise</option></select></div>
+    </div>
+    <div class="btn-row"><button class="btn" onclick="generateOutreach()">✉ Generate Message</button></div>
+    <div class="output-box" id="outreach-output">Aapka personalized message yahan aayega...</div>
+    <div class="copy-row">
+      <span class="copy-hint">{name}, {company}, {title} apne aap fill ho jayenge</span>
+      <button class="btn small ghost" onclick="copyText('outreach-output')">📋 Copy</button>
+    </div>
+  </div>
+
+  <div class="ad-slot">Advertisement</div>
+</div>
+
+<!-- ================= TAB 5: HINDI GUIDE ================= -->
+<div class="tab-content" id="tab-guide">
+  <div class="hindi-guide">
+    <h2>🇮🇳 LinkedIn Lead Finder Pro — पूरी Hindi गाइड</h2>
+
+    <h3>यह टूल क्या करता है?</h3>
+    <p>यह टूल आपको LinkedIn पर सही क्लाइंट्स ढूंढने, उन्हें स्कोर करने, उनका रिकॉर्ड रखने और सही मैसेज भेजने में मदद करता है — बिना किसी पेड सॉफ्टवेयर के। सारा डेटा आपके ब्राउज़र में ही सेव होता है (LocalStorage), कहीं और नहीं भेजा जाता।</p>
+
+    <h3>1️⃣ Search Builder टैब</h3>
+    <ul>
+      <li>यहां आप Job Title, Industry, Location, Keywords भरें।</li>
+      <li><b>Google X-Ray Search:</b> यह एक ऐसी query बनाता है जिसे आप सीधे Google में paste करके LinkedIn प्रोफाइल्स ढूंढ सकते हैं (बिना LinkedIn Premium के)।</li>
+      <li><b>Sales Navigator Boolean:</b> अगर आपके पास Sales Navigator है तो यह उसमें इस्तेमाल होने वाली boolean string देता है।</li>
+      <li>नीचे "Saved Presets" में common scenarios के ready-made templates हैं — एक क्लिक में लोड करें।</li>
+    </ul>
+
+    <h3>2️⃣ Lead Scoring टैब</h3>
+    <ul>
+      <li>किसी भी लीड की जानकारी (Job Title, Company Size, Activity, Intent आदि) भरें।</li>
+      <li>टूल अपने आप 0-100 का स्कोर देगा और बताएगा — Hot 🔥 (70+), Warm 🌤️ (40-69), या Cold ❄️ (below 40)।</li>
+      <li>Hot leads पर पहले फोकस करें — इनके convert होने के chances सबसे ज़्यादा हैं।</li>
+      <li>स्कोर निकालने के बाद "Add This Lead to Tracker" बटन दबाकर सीधे पाइपलाइन में भेज सकते हैं।</li>
+    </ul>
+
+    <h3>3️⃣ Lead Tracker टैब</h3>
+    <ul>
+      <li>यह आपका मिनी-CRM है। हर लीड की Name, Company, Score, Status और Deal Value (₹) यहां track होती है।</li>
+      <li>Status बदलते रहें: New → Contacted → Replied → Qualified → Closed।</li>
+      <li>ऊपर के stat cards में आपको Total Leads, Hot Leads, Contacted count और कुल Pipeline Value (₹) दिखेगी।</li>
+      <li>"Export CSV" बटन से पूरा डेटा Excel/Google Sheets में डाउनलोड करें।</li>
+      <li>⚠️ "Clear All" से सारा डेटा हमेशा के लिए डिलीट हो जाता है — सावधानी से इस्तेमाल करें।</li>
+    </ul>
+
+    <h3>4️⃣ Outreach Generator टैब</h3>
+    <ul>
+      <li>5 तरह के मैसेज टेम्पलेट: Connection Request, Intro Message, Follow-Up, Service Pitch, और Break-up Message (जब लीड reply ना करे)।</li>
+      <li>लीड की डिटेल्स भरें और Tone चुनें (Professional / Friendly / Direct)।</li>
+      <li>"Generate Message" दबाएं और Copy करके सीधे LinkedIn पर paste कर दें।</li>
+    </ul>
+
+    <h3>💡 इस्तेमाल करने का सही तरीका (Workflow)</h3>
+    <ol>
+      <li>Search Builder से query बनाएं → LinkedIn/Google पर सर्च करें</li>
+      <li>मिली हुई प्रोफाइल्स को Lead Scoring में डालकर स्कोर निकालें</li>
+      <li>अच्छे स्कोर वाली लीड्स को Tracker में add करें</li>
+      <li>Outreach Generator से पर्सनलाइज़्ड मैसेज बनाकर भेजें</li>
+      <li>रोज़ाना Status अपडेट करते रहें और Pipeline Value ट्रैक करें</li>
+    </ol>
+
+    <h3>⚠️ ज़रूरी बातें</h3>
+    <ul>
+      <li>यह टूल LinkedIn को खुद scrape/automate नहीं करता — यह LinkedIn के Terms of Service का उल्लंघन होगा। यह सिर्फ आपको स्मार्ट search strings, scoring और tracking में मदद करता है, मैन्युअल रूप से।</li>
+      <li>डेटा आपके ब्राउज़र के LocalStorage में सेव होता है — ब्राउज़र data/cache clear करने पर लीड्स डिलीट हो सकती हैं। इसलिए नियमित रूप से CSV export करते रहें।</li>
+      <li>AdSense earning शुरू करने के लिए पेज के अंदर मौजूद <span class="mono">ca-pub-XXXXXXXXXXXXXXXX</span> को अपनी असली Publisher ID से बदलें।</li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<div class="footer">
+  <div class="brand" style="justify-content:center;"><span class="dot"></span><span>IncomeAIHub</span></div>
+  LinkedIn Lead Finder Pro &copy; 2026 &bull; Built for Indian Freelancers &amp; Agencies &bull; 100% Client-Side, Privacy-First
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ TAB SWITCHING ============ */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  });
+});
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+function copyText(id){
+  const text = document.getElementById(id).textContent;
+  if(!text || text.includes('yahan') || text.includes('aayega')){ showToast('Pehle content generate karo!'); return; }
+  navigator.clipboard.writeText(text).then(()=>showToast('Copied to clipboard! ✅'));
+}
+
+/* ============ SEARCH BUILDER ============ */
+function buildSearch(){
+  const title = document.getElementById('s-title').value.trim();
+  const industry = document.getElementById('s-industry').value.trim();
+  const location = document.getElementById('s-location').value.trim();
+  const company = document.getElementById('s-company').value.trim();
+  const keywords = document.getElementById('s-keywords').value.trim();
+  const exclude = document.getElementById('s-exclude').value.trim();
+  const mode = document.getElementById('s-mode').value;
+
+  const titleList = title ? title.split(',').map(t=>`"${t.trim()}"`).join(' OR ') : '';
+  const kwList = keywords ? keywords.split(',').map(k=>`"${k.trim()}"`).join(' OR ') : '';
+  const exList = exclude ? exclude.split(',').map(e=>`-"${e.trim()}"`).join(' ') : '';
+
+  let output = '';
+  if(mode === 'xray'){
+    output = `site:linkedin.com/in/ `;
+    if(titleList) output += `(${titleList}) `;
+    if(industry) output += `"${industry}" `;
+    if(location) output += `"${location}" `;
+    if(company) output += `"${company}" `;
+    if(kwList) output += `(${kwList}) `;
+    if(exList) output += exList;
+  } else if(mode === 'sn'){
+    output = `Title: (${titleList || '"Founder" OR "CEO"'})`;
+    if(location) output += ` AND Geography: "${location}"`;
+    if(industry) output += ` AND Industry: "${industry}"`;
+    if(kwList) output += ` AND Keywords: (${kwList})`;
+    if(exList) output += ` NOT (${exclude.split(',').map(e=>`"${e.trim()}"`).join(' OR ')})`;
+  } else {
+    let parts = [];
+    if(titleList) parts.push(titleList);
+    if(industry) parts.push(`"${industry}"`);
+    if(location) parts.push(`"${location}"`);
+    if(company) parts.push(`"${company}"`);
+    if(kwList) parts.push(kwList);
+    output = parts.join(' ');
+    if(exList) output += ' ' + exList;
+  }
+
+  document.getElementById('search-output').textContent = output.trim() || 'Kripya kam se kam ek field bharein';
+
+  const googleLink = document.getElementById('open-google');
+  if(mode === 'xray' && output.trim()){
+    googleLink.href = 'https://www.google.com/search?q=' + encodeURIComponent(output.trim());
+    googleLink.style.display = 'inline-block';
+  } else {
+    googleLink.style.display = 'none';
+  }
+}
+
+function clearSearch(){
+  ['s-title','s-industry','s-location','s-company','s-keywords','s-exclude'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('search-output').textContent = 'Aapki search query yahan generate hogi...';
+  document.getElementById('open-google').style.display='none';
+}
+
+const presets = {
+  freelance: {title:'Founder, Owner, Small Business Owner', industry:'', location:'India', company:'startup, agency', keywords:'hiring freelancer, need help, looking for', exclude:'student, intern'},
+  agency: {title:'Agency Owner, Managing Director, Creative Director', industry:'Marketing and Advertising', location:'', company:'agency', keywords:'clients, portfolio', exclude:''},
+  startup: {title:'Founder, Co-Founder, CEO', industry:'Technology, SaaS', location:'India', company:'startup', keywords:'funded, seed, series a, hiring', exclude:'unpaid'},
+  hr: {title:'HR Manager, Talent Acquisition, Recruiter', industry:'', location:'India', company:'', keywords:'hiring, open roles, urgent hiring', exclude:'intern only'},
+  ecom: {title:'Founder, Store Owner, E-commerce Manager', industry:'E-commerce, Retail', location:'India', company:'shopify, D2C, brand', keywords:'scaling, growth, ads budget', exclude:'dropshipping course'}
+};
+function applyPreset(key){
+  const p = presets[key];
+  document.getElementById('s-title').value = p.title;
+  document.getElementById('s-industry').value = p.industry;
+  document.getElementById('s-location').value = p.location;
+  document.getElementById('s-company').value = p.company;
+  document.getElementById('s-keywords').value = p.keywords;
+  document.getElementById('s-exclude').value = p.exclude;
+  buildSearch();
+  showToast('Preset loaded! Ab customize karo ya seedha generate karo.');
+}
+
+/* ============ LEAD SCORING ============ */
+let lastScoreData = null;
+function calculateScore(){
+  const fields = ['sc-title','sc-size','sc-industry','sc-activity','sc-degree','sc-intent','sc-budget','sc-profile'];
+  const labels = {
+    'sc-title':'Job Title Match','sc-size':'Company Size','sc-industry':'Industry Fit',
+    'sc-activity':'Activity Level','sc-degree':'Connection Degree','sc-intent':'Buying Intent',
+    'sc-budget':'Budget Indicator','sc-profile':'Profile Completeness'
+  };
+  const maxVals = {'sc-title':10,'sc-size':9,'sc-industry':10,'sc-activity':9,'sc-degree':8,'sc-intent':10,'sc-budget':9,'sc-profile':6};
+  let total = 0, maxTotal = 0;
+  let breakdown = '';
+  fields.forEach(id=>{
+    const val = parseInt(document.getElementById(id).value);
+    total += val;
+    maxTotal += maxVals[id];
+    breakdown += `<div class="row"><span>${labels[id]}</span><span>${val}/${maxVals[id]}</span></div>`;
+  });
+  const score = Math.round((total/maxTotal)*100);
+
+  let tag = 'tag-cold', tagText = '❄️ COLD LEAD';
+  let color = 'var(--cyan)';
+  if(score >= 70){ tag='tag-hot'; tagText='🔥 HOT LEAD'; color='#ff3860'; }
+  else if(score >= 40){ tag='tag-warm'; tagText='🌤️ WARM LEAD'; color='#ffb020'; }
+
+  document.getElementById('score-result-panel').style.display = 'block';
+  document.getElementById('score-tag-wrap').innerHTML = `<span class="score-tag ${tag}">${tagText}</span>`;
+  document.getElementById('score-val').textContent = score;
+  document.getElementById('score-breakdown').innerHTML = breakdown;
+
+  const circle = document.getElementById('score-circle');
+  const circumference = 2 * Math.PI * 60;
+  circle.style.strokeDasharray = circumference;
+  circle.style.strokeDashoffset = circumference - (score/100)*circumference;
+  circle.style.stroke = color;
+  document.getElementById('score-val').style.color = color;
+
+  lastScoreData = {score, tagText};
+  document.getElementById('score-result-panel').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function pushScoredLeadToTracker(){
+  if(!lastScoreData){ showToast('Pehle score calculate karo!'); return; }
+  document.querySelector('[data-tab="tracker"]').click();
+  document.getElementById('l-score').value = lastScoreData.score;
+  document.getElementById('l-name').focus();
+  showToast('Score fill ho gaya — ab naam aur details bharke Add Lead dabao');
+}
+
+/* ============ LEAD TRACKER (localStorage CRM) ============ */
+let leads = JSON.parse(localStorage.getItem('lff_leads') || '[]');
+
+function saveLeads(){
+  localStorage.setItem('lff_leads', JSON.stringify(leads));
+  renderLeads();
+  updateStats();
+}
+
+function addLead(){
+  const name = document.getElementById('l-name').value.trim();
+  if(!name){ showToast('Lead ka naam zaroori hai!'); return; }
+  const lead = {
+    id: Date.now(),
+    name,
+    title: document.getElementById('l-title').value.trim(),
+    company: document.getElementById('l-company').value.trim(),
+    url: document.getElementById('l-url').value.trim(),
+    score: parseInt(document.getElementById('l-score').value) || 0,
+    status: document.getElementById('l-status').value,
+    value: parseFloat(document.getElementById('l-value').value) || 0,
+    notes: document.getElementById('l-notes').value.trim()
+  };
+  leads.unshift(lead);
+  saveLeads();
+  ['l-name','l-title','l-company','l-url','l-score','l-value','l-notes'].forEach(id=>document.getElementById(id).value='');
+  showToast('Lead add ho gayi! ✅');
+}
+
+function deleteLead(id){
+  if(!confirm('Ye lead delete karni hai?')) return;
+  leads = leads.filter(l=>l.id !== id);
+  saveLeads();
+}
+
+function cycleStatus(id){
+  const order = ['New','Contacted','Replied','Qualified','Closed'];
+  const lead = leads.find(l=>l.id===id);
+  const idx = order.indexOf(lead.status);
+  lead.status = order[(idx+1) % order.length];
+  saveLeads();
+}
+
+function clearAllLeads(){
+  if(!confirm('Saari leads delete ho jayengi. Pakka?')) return;
+  leads = [];
+  saveLeads();
+}
+
+function renderLeads(){
+  const filter = (document.getElementById('search-filter')?.value || '').toLowerCase();
+  const filtered = leads.filter(l => l.name.toLowerCase().includes(filter) || l.company.toLowerCase().includes(filter));
+  const tbody = document.getElementById('lead-table-body');
+  const empty = document.getElementById('empty-state');
+
+  if(filtered.length === 0){
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  tbody.innerHTML = filtered.map(l=>{
+    const badgeClass = 'badge-' + l.status.toLowerCase();
+    let scoreColor = 'var(--cyan)';
+    if(l.score >= 70) scoreColor = 'var(--red)';
+    else if(l.score >= 40) scoreColor = 'var(--amber)';
+    return `<tr>
+      <td><b>${escapeHtml(l.name)}</b>${l.url ? `<br><a href="${escapeHtml(ensureUrl(l.url))}" target="_blank" style="color:var(--muted);font-size:0.7rem;">🔗 profile</a>` : ''}</td>
+      <td>${escapeHtml(l.title)}</td>
+      <td>${escapeHtml(l.company)}</td>
+      <td><span class="score-pill" style="background:${scoreColor}22;color:${scoreColor};">${l.score}</span></td>
+      <td><span class="badge ${badgeClass}" style="cursor:pointer;" onclick="cycleStatus(${l.id})" title="Click to change status">${l.status}</span></td>
+      <td>₹${l.value.toLocaleString('en-IN')}</td>
+      <td style="max-width:150px;">${escapeHtml(l.notes)}</td>
+      <td><button class="icon-btn del" onclick="deleteLead(${l.id})">✕</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function ensureUrl(u){ return u.startsWith('http') ? u : 'https://' + u; }
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str || '';
+  return d.innerHTML;
+}
+
+function updateStats(){
+  document.getElementById('stat-total').textContent = leads.length;
+  document.getElementById('stat-hot').textContent = leads.filter(l=>l.score>=70).length;
+  document.getElementById('stat-contacted').textContent = leads.filter(l=>l.status==='Contacted').length;
+  document.getElementById('stat-qualified').textContent = leads.filter(l=>l.status==='Qualified').length;
+  const pipeline = leads.reduce((sum,l)=>sum + (l.value||0), 0);
+  document.getElementById('stat-pipeline').textContent = '₹' + pipeline.toLocaleString('en-IN');
+}
+
+function exportCSV(){
+  if(leads.length === 0){ showToast('Koi lead nahi hai export karne ke liye'); return; }
+  const headers = ['Name','Title','Company','LinkedIn URL','Score','Status','Deal Value (INR)','Notes'];
+  const rows = leads.map(l=>[l.name,l.title,l.company,l.url,l.score,l.status,l.value,l.notes]);
+  let csv = headers.join(',') + '\n';
+  rows.forEach(r=>{
+    csv += r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',') + '\n';
+  });
+  const blob = new Blob([csv], {type:'text/csv'});
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'linkedin_leads_' + new Date().toISOString().slice(0,10) + '.csv';
+  link.click();
+  showToast('CSV download ho gayi! 📥');
+}
+
+/* ============ OUTREACH GENERATOR ============ */
+let currentTemplate = 'connect';
+function setTemplate(t){
+  currentTemplate = t;
+  document.querySelectorAll('.chip[data-tpl]').forEach(c=>c.classList.remove('active'));
+  document.querySelector(`.chip[data-tpl="${t}"]`).classList.add('active');
+}
+
+const templates = {
+  connect: {
+    professional: (n,c,t,s,my) => `Hi ${n}, I came across your profile and was impressed by your work at ${c}. I help businesses like yours with ${s}. Would love to connect and share some ideas.\n\nBest,\n${my}`,
+    friendly: (n,c,t,s,my) => `Hey ${n}! 👋 Saw your profile and loved what you're building at ${c}. I work in ${s} and think we could have some great conversations. Let's connect!\n\n${my}`,
+    direct: (n,c,t,s,my) => `Hi ${n}, connecting as I specialize in ${s} and think it could be relevant for ${c}. Open to a quick chat.\n\n${my}`
+  },
+  intro: {
+    professional: (n,c,t,s,my) => `Hi ${n},\n\nThanks for connecting. I noticed you're the ${t} at ${c} — really admire the work your team is doing.\n\nI specialize in ${s} and have helped similar businesses improve their results. Would you be open to a quick 10-minute call this week to explore if there's a fit?\n\nLooking forward to hearing from you.\n\nBest regards,\n${my}`,
+    friendly: (n,c,t,s,my) => `Hey ${n}! Thanks for accepting 🙌\n\nI help businesses with ${s}, and honestly ${c} caught my eye — looks like you're doing some cool stuff. Would you be up for a quick chat sometime this week? No pressure, just want to see if I can add value.\n\nCheers,\n${my}`,
+    direct: (n,c,t,s,my) => `Hi ${n}, I help companies like ${c} with ${s}. If that's something on your radar, happy to send over a few ideas or hop on a quick call. Let me know what works.\n\n${my}`
+  },
+  followup: {
+    professional: (n,c,t,s,my) => `Hi ${n},\n\nJust following up on my earlier message about ${s} for ${c}. I understand you're likely busy — would a brief 10-minute call sometime next week work better?\n\nHappy to work around your schedule.\n\nBest,\n${my}`,
+    friendly: (n,c,t,s,my) => `Hey ${n}, just floating this back up in case it got buried! 😊 Still keen to chat about ${s} for ${c} whenever you have a few minutes.\n\n${my}`,
+    direct: (n,c,t,s,my) => `Hi ${n}, following up — still interested in discussing ${s} for ${c}? Let me know either way.\n\n${my}`
+  },
+  pitch: {
+    professional: (n,c,t,s,my) => `Hi ${n},\n\nI wanted to share how I could specifically help ${c} with ${s}. Based on what I've seen in your industry, businesses typically see measurable improvements within the first 30 days.\n\nI'd love to put together a short proposal tailored to ${c}. Would you be open to a call this week to discuss your current goals?\n\nBest,\n${my}`,
+    friendly: (n,c,t,s,my) => `Hey ${n}! So I've been thinking about how ${s} could really help ${c} grow. I've got a few ideas specific to your situation — want me to send them over, or would a quick call be easier?\n\n${my}`,
+    direct: (n,c,t,s,my) => `Hi ${n}, I can help ${c} with ${s}. Here's what I'd propose: a quick audit, then a tailored plan. Interested in a 15-min call this week?\n\n${my}`
+  },
+  breakup: {
+    professional: (n,c,t,s,my) => `Hi ${n},\n\nI haven't heard back, so I'll assume the timing isn't right for ${s} at ${c} at the moment. I'll close this out on my end, but please feel free to reach out anytime in the future if things change.\n\nWishing you and ${c} continued success.\n\nBest,\n${my}`,
+    friendly: (n,c,t,s,my) => `Hey ${n}, haven't heard back so I'll stop bugging your inbox! 😄 If ${s} becomes relevant for ${c} down the line, my door's always open. Take care!\n\n${my}`,
+    direct: (n,c,t,s,my) => `Hi ${n}, no response so I'll close this thread for now. Reach out if ${s} becomes a priority for ${c} later.\n\n${my}`
+  }
+};
+
+function generateOutreach(){
+  const n = document.getElementById('o-name').value.trim() || '[Name]';
+  const c = document.getElementById('o-company').value.trim() || '[Company]';
+  const t = document.getElementById('o-title').value.trim() || '[Title]';
+  const s = document.getElementById('o-service').value.trim() || '[your service]';
+  const my = document.getElementById('o-myname').value.trim() || '[Your Name]';
+  const tone = document.getElementById('o-tone').value;
+
+  const msg = templates[currentTemplate][tone](n,c,t,s,my);
+  document.getElementById('outreach-output').textContent = msg;
+}
+
+/* ============ INIT ============ */
+renderLeads();
+updateStats();
+</script>
+
+</body>
+</html>
